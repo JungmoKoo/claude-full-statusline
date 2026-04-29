@@ -1,14 +1,14 @@
 # claude-full-statusline
 
-Claude HUD 표시 옵션 + statusline 끝에 8자리 SessionID를 회색으로 붙이는 커스텀 설정.
+Custom Claude HUD display options plus an 8-character SessionID suffix (rendered in dim grey) appended to the statusline.
 
-## 사전 조건
+## Prerequisites
 
-- Claude Code 안에서 `/claude-hud:setup`을 한 번 실행해 둔 상태
-- `jq`, `bun`이 설치되어 있을 것
-  - 확인: `command -v jq && command -v bun` (둘 다 경로가 떠야 정상)
+- You have run `/claude-hud:setup` once inside Claude Code.
+- `jq` and `bun` must be installed.
+  - Verify: `command -v jq && command -v bun` (both should print a path)
 
-### 의존성 설치
+### Installing dependencies
 
 #### `jq`
 
@@ -30,18 +30,18 @@ sudo pacman -S jq
 
 ```bash
 curl -fsSL https://bun.sh/install | bash
-# 설치 후 새 셸을 열거나 다음을 실행해 PATH 반영:
+# After install, open a new shell or apply PATH in the current shell:
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 ```
 
-설치 확인:
+Verify:
 
 ```bash
 command -v jq && command -v bun
 ```
 
-## 설치
+## 🚀 Installation
 
 ```bash
 git clone https://github.com/JungmoKoo/claude-full-statusline.git
@@ -49,21 +49,21 @@ cd claude-full-statusline
 ./install.sh
 ```
 
-설치가 끝나면 Claude Code를 재시작하세요. statusline 첫 줄 끝에 ` | SessionID: xxxxxxxx`(회색)이 보이면 성공.
+When it finishes, restart Claude Code. You should see ` | SessionID: xxxxxxxx` (dim grey) at the end of the statusline's first line.
 
-## 무엇을 바꾸는가
+## What it changes
 
-- `config.json` → `~/.claude/plugins/claude-hud/config.json`로 복사 (HUD 표시 옵션)
-- `~/.claude/settings.json`의 `statusLine.command`를 SessionID 후처리가 들어간 버전으로 교체
+- Copies `config.json` to `~/.claude/plugins/claude-hud/config.json` (HUD display options).
+- Patches `~/.claude/settings.json` so that `statusLine.command` runs claude-hud and appends the SessionID suffix.
 
-기존 `settings.json`은 자동으로 `settings.json.bak.<epoch>`로 백업됩니다.
+Your existing `settings.json` is automatically backed up to `settings.json.bak.<epoch>`.
 
-## 원복
+## Restore
 
 ```bash
 ls -t ~/.claude/settings.json.bak.* | head -1 | xargs -I{} cp {} ~/.claude/settings.json
 ```
 
-## 커스터마이즈
+## Customize
 
-표시 옵션을 바꾸고 싶다면 `config.json`만 수정하고 `./install.sh`를 다시 돌리면 됩니다.
+To change display options, edit `config.json` and re-run `./install.sh`.
