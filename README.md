@@ -1,35 +1,32 @@
 # claude-full-statusline
 
-Custom Claude HUD display options, an 8-character SessionID suffix, and the time of the last assistant response — all rendered in dim grey at the end of the statusline's first line.
+Adds **SessionID** and **last response time** to the Claude Code statusline.
 
-Example suffix: ` | SessionID: a1b2c3d4 | Last: 14:23 · 3m ago`
+```
+... | SessionID: a1b2c3d4 | Last: 14:23 · 3m ago
+```
 
-This repo customizes the [claude-hud](https://github.com/jarrodwatts/claude-hud) plugin, so you must install claude-hud first. The steps below walk through everything from scratch — follow them in order and you'll be up and running.
+---
 
-## Prerequisites
+## 🚀 Install — 3 steps
 
-The only extra runtime dependency is **`bun`** — claude-hud itself runs through bun, and we reuse it here so you don't need `jq` or any other tool.
+### 1️⃣ Install **bun**
+
+**macOS / Linux / WSL / Git Bash on Windows:**
 
 ```bash
 curl -fsSL https://bun.sh/install | bash
-# Open a new shell, or apply PATH in the current one:
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 ```
 
-Verify:
+**Windows PowerShell:**
 
-```bash
-command -v bun
+```powershell
+irm https://bun.sh/install.ps1 | iex
 ```
 
-> Works on macOS, Linux, WSL, and Git Bash on Windows. Native PowerShell / cmd is not supported because the installer and the statusline command are bash-based (same constraint as claude-hud).
+> Restart your shell so PATH is refreshed.
 
-## 🚀 Installation
-
-### Step 1 — Install the `claude-hud` plugin
-
-Inside Claude Code, run the following slash commands one by one:
+### 2️⃣ Install **claude-hud** plugin (inside Claude Code)
 
 ```
 /plugin marketplace add jarrodwatts/claude-hud
@@ -37,52 +34,37 @@ Inside Claude Code, run the following slash commands one by one:
 /claude-hud:setup
 ```
 
-This adds the marketplace, installs the plugin, and runs its setup. The setup step is required before continuing — `install.sh` checks that the plugin is present and will fail otherwise.
+### 3️⃣ Install **this customization**
 
-### Step 2 — Install this customization
-
-In your shell (outside Claude Code):
+**macOS / Linux / WSL / Git Bash on Windows:**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh | bash
 ```
 
-That fetches `install.sh`, which in turn pulls `config.json` from this repo and patches your `~/.claude/settings.json`.
+**Windows PowerShell:**
 
-> **Windows users**: the command above works as-is in **Git Bash** or **WSL**. If you'd rather stay in **PowerShell**, use this variant — `curl.exe` bypasses PowerShell's `Invoke-WebRequest` alias, and `bash` resolves to Git for Windows' `bash.exe` if it's on PATH:
->
-> ```powershell
-> curl.exe -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh | bash
-> ```
->
-> Native `cmd.exe` without bash is not supported (the installer and statusline command are bash-based — same constraint as claude-hud).
+```powershell
+curl.exe -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh -o "$env:TEMP\install.sh"
+& "$env:ProgramFiles\Git\bin\bash.exe" "$env:TEMP\install.sh"
+```
 
-If you'd rather customize `config.json` before installing, clone instead:
+> ✅ Restart Claude Code. Done.
+> Your `~/.claude/settings.json` is auto-backed up to `settings.json.bak.<epoch>`.
+
+---
+
+## 🎨 Customize
 
 ```bash
 git clone https://github.com/JungmoKoo/claude-full-statusline.git
 cd claude-full-statusline
-# edit config.json here if you want
+# edit config.json
 ./install.sh
 ```
 
-When it finishes, restart Claude Code. You should see ` | SessionID: xxxxxxxx | Last: HH:MM · Nm ago` (dim grey) at the end of the statusline's first line. The `Last: ...` segment appears after the first assistant response in the session — it won't show up until then.
-
-## What it changes
-
-- Copies `config.json` to `~/.claude/plugins/claude-hud/config.json` (HUD display options).
-- Patches `~/.claude/settings.json` so that:
-  - `statusLine.command` runs claude-hud and appends the SessionID + last-response-time suffix.
-  - A `Stop` hook writes a per-session timestamp to `~/.claude/claude-full-statusline/last-stop-<sessionid>` after every assistant response. (The hook is tagged with a marker so re-running `install.sh` replaces it instead of duplicating.)
-
-Your existing `settings.json` is automatically backed up to `settings.json.bak.<epoch>`.
-
-## Restore
+## ↩️ Restore
 
 ```bash
 ls -t ~/.claude/settings.json.bak.* | head -1 | xargs -I{} cp {} ~/.claude/settings.json
 ```
-
-## Customize
-
-To change display options, edit `config.json` and re-run `./install.sh`.

@@ -89,5 +89,7 @@ SETTINGS_PATH="$SETTINGS" STATUSLINE_CMD="$CMD" STOP_HOOK_CMD="$STOP_CMD" \
   '
 echo "[OK] statusLine + Stop hook patched in $SETTINGS"
 
-echo
-echo "Done. Restart Claude Code to apply."
+echo ""
+echo "🎉  Installation complete!"
+echo "👉  Restart Claude Code to apply the new statusline."
+echo ""
