@@ -12,19 +12,16 @@ Adds **SessionID** and **last response time** to the Claude Code statusline.
 
 ### 1️⃣ Install **bun**
 
-**macOS / Linux / WSL / Git Bash on Windows:**
-
 ```bash
 curl -fsSL https://bun.sh/install | bash
 ```
 
-**Windows PowerShell:**
+> **Windows PowerShell**
+> ```powershell
+> irm https://bun.sh/install.ps1 | iex
+> ```
 
-```powershell
-irm https://bun.sh/install.ps1 | iex
-```
-
-> Restart your shell so PATH is refreshed.
+Restart your shell so PATH is refreshed.
 
 ### 2️⃣ Install **claude-hud** plugin (inside Claude Code)
 
@@ -36,21 +33,17 @@ irm https://bun.sh/install.ps1 | iex
 
 ### 3️⃣ Install **this customization**
 
-**macOS / Linux / WSL / Git Bash on Windows:**
-
 ```bash
 curl -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh | bash
 ```
 
-**Windows PowerShell:**
+> **Windows PowerShell**
+> ```powershell
+> iwr https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh -OutFile "$env:TEMP\install.sh"
+> & "$env:ProgramFiles\Git\bin\bash.exe" "$env:TEMP\install.sh"
+> ```
 
-```powershell
-curl.exe -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh -o "$env:TEMP\install.sh"
-& "$env:ProgramFiles\Git\bin\bash.exe" "$env:TEMP\install.sh"
-```
-
-> ✅ Restart Claude Code. Done.
-> Your `~/.claude/settings.json` is auto-backed up to `settings.json.bak.<epoch>`.
+**✅ Restart Claude Code.** Your `~/.claude/settings.json` is auto-backed up to `settings.json.bak.<epoch>`.
 
 ---
 
