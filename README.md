@@ -8,32 +8,11 @@ This repo customizes the [claude-hud](https://github.com/jarrodwatts/claude-hud)
 
 ## Prerequisites
 
-- `jq` and `bun` must be installed.
-  - Verify: `command -v jq && command -v bun` (both should print a path)
-
-### Installing dependencies
-
-#### `jq`
-
-```bash
-# Debian / Ubuntu
-sudo apt update && sudo apt install -y jq
-
-# macOS (Homebrew)
-brew install jq
-
-# Fedora / RHEL
-sudo dnf install -y jq
-
-# Arch
-sudo pacman -S jq
-```
-
-#### `bun`
+The only extra runtime dependency is **`bun`** — claude-hud itself runs through bun, and we reuse it here so you don't need `jq` or any other tool.
 
 ```bash
 curl -fsSL https://bun.sh/install | bash
-# After install, open a new shell or apply PATH in the current shell:
+# Open a new shell, or apply PATH in the current one:
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 ```
@@ -41,8 +20,10 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 Verify:
 
 ```bash
-command -v jq && command -v bun
+command -v bun
 ```
+
+> Works on macOS, Linux, WSL, and Git Bash on Windows. Native PowerShell / cmd is not supported because the installer and the statusline command are bash-based (same constraint as claude-hud).
 
 ## 🚀 Installation
 
