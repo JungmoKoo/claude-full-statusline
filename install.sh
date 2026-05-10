@@ -22,10 +22,23 @@ if ! ls -1d "${CLAUDE_CONFIG_DIR:-$HOME/.claude}"/plugins/cache/*/claude-hud/*/ 
 fi
 
 # --- 1) Place HUD display config ------------------------------------------
+# Use the config.json next to this script when it exists (git-clone install).
+# Otherwise (one-liner `curl ... | bash` install) fetch the canonical copy
+# from the repo.
 HUD_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/plugins/claude-hud"
 mkdir -p "$HUD_DIR"
-cp "$SCRIPT_DIR/config.json" "$HUD_DIR/config.json"
-echo "[OK] config.json -> $HUD_DIR/config.json"
+if [ -f "$SCRIPT_DIR/config.json" ]; then
+  cp "$SCRIPT_DIR/config.json" "$HUD_DIR/config.json"
+  echo "[OK] config.json (local) -> $HUD_DIR/config.json"
+else
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "Error: 'curl' is required to fetch config.json when install.sh is piped." >&2
+    exit 1
+  fi
+  curl -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/config.json \
+    -o "$HUD_DIR/config.json"
+  echo "[OK] config.json (fetched) -> $HUD_DIR/config.json"
+fi
 
 # Per-session last-stop timestamps live here (written by the Stop hook,
 # read by the statusLine command).

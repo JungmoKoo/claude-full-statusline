@@ -63,8 +63,17 @@ This adds the marketplace, installs the plugin, and runs its setup. The setup st
 In your shell (outside Claude Code):
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh | bash
+```
+
+That fetches `install.sh`, which in turn pulls `config.json` from this repo and patches your `~/.claude/settings.json`.
+
+If you'd rather customize `config.json` before installing, clone instead:
+
+```bash
 git clone https://github.com/JungmoKoo/claude-full-statusline.git
 cd claude-full-statusline
+# edit config.json here if you want
 ./install.sh
 ```
 
