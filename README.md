@@ -49,6 +49,14 @@ curl -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/ma
 
 That fetches `install.sh`, which in turn pulls `config.json` from this repo and patches your `~/.claude/settings.json`.
 
+> **Windows users**: the command above works as-is in **Git Bash** or **WSL**. If you'd rather stay in **PowerShell**, use this variant — `curl.exe` bypasses PowerShell's `Invoke-WebRequest` alias, and `bash` resolves to Git for Windows' `bash.exe` if it's on PATH:
+>
+> ```powershell
+> curl.exe -fsSL https://raw.githubusercontent.com/JungmoKoo/claude-full-statusline/main/install.sh | bash
+> ```
+>
+> Native `cmd.exe` without bash is not supported (the installer and statusline command are bash-based — same constraint as claude-hud).
+
 If you'd rather customize `config.json` before installing, clone instead:
 
 ```bash
