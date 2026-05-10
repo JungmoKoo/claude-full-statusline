@@ -3,7 +3,7 @@
 Adds **SessionID** and **last response time** to the Claude Code statusline.
 
 ```
-... | SessionID: a1b2c3d4 | Last: 14:23 · 3m ago
+... | SessionID: a1b2c3d4 | Last: 2026-05-10 16:02:35
 ```
 
 ---
