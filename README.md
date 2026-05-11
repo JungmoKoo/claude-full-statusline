@@ -1,9 +1,11 @@
 # claude-full-statusline
 
-Adds **SessionID** and **last response time** to the Claude Code statusline.
+Adds **SessionID** and **last response time** to the Claude Code statusline,
+on its own line below the HUD so the existing rows are never truncated.
 
 ```
-... | SessionID: a1b2c3d4 | Last: 2026-05-10 16:02:35
+... (claude-hud output) ...
+SessionID: a1b2c3d4 | Last: 2026-05-10 16:02:35
 ```
 
 ---

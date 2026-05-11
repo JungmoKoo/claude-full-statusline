@@ -47,10 +47,12 @@ DATA_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/claude-full-statusline"
 mkdir -p "$DATA_DIR"
 
 # --- 2) Patch settings.json's statusLine.command --------------------------
-# The statusLine command runs claude-hud and appends ` | SessionID: xxxxxxxx`
-# and ` | Last: HH:MM · Nm ago` (both dim grey) to the first output line.
+# The statusLine command runs claude-hud and appends a new dim-grey line
+# `SessionID: xxxxxxxx | Last: YYYY-MM-DD HH:MM:SS` below the HUD output.
+# Keeping it on its own line prevents the first HUD row from overflowing
+# the terminal width and hiding the lines below.
 read -r -d '' CMD <<'EOF' || true
-bash -c 'cols=$(stty size </dev/tty 2>/dev/null | awk '"'"'{print $2}'"'"'); export COLUMNS=$(( ${cols:-120} > 4 ? ${cols:-120} - 4 : 1 )); plugin_dir=$(ls -1d "${CLAUDE_CONFIG_DIR:-$HOME/.claude}"/plugins/cache/*/claude-hud/*/ 2>/dev/null | sort -V | tail -1); bun_bin=$(command -v bun || echo "$HOME/.bun/bin/bun"); input=$(cat); full_sid=$(printf "%s" "$input" | sed -n '"'"'s/.*"session_id"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'"'"' | head -1); sid=$(printf "%s" "$full_sid" | cut -c1-8); ESC=$(printf "\033"); sfx=""; [ -n "$sid" ] && sfx=" ${ESC}[2m| SessionID:${ESC}[0m $sid"; last_file="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/claude-full-statusline/last-stop-$full_sid"; if [ -n "$full_sid" ] && [ -f "$last_file" ]; then ts=$(cat "$last_file" 2>/dev/null); if [ -n "$ts" ]; then abs=$(date -d "@$ts" "+%Y-%m-%d %H:%M:%S" 2>/dev/null || date -r "$ts" "+%Y-%m-%d %H:%M:%S" 2>/dev/null); [ -n "$abs" ] && sfx="$sfx ${ESC}[2m| Last:${ESC}[0m $abs"; fi; fi; printf "%s" "$input" | "$bun_bin" --env-file /dev/null "${plugin_dir}src/index.ts" | sed "1 s~\$~$sfx~"'
+bash -c 'cols=$(stty size </dev/tty 2>/dev/null | awk '"'"'{print $2}'"'"'); export COLUMNS=$(( ${cols:-120} > 4 ? ${cols:-120} - 4 : 1 )); plugin_dir=$(ls -1d "${CLAUDE_CONFIG_DIR:-$HOME/.claude}"/plugins/cache/*/claude-hud/*/ 2>/dev/null | sort -V | tail -1); bun_bin=$(command -v bun || echo "$HOME/.bun/bin/bun"); input=$(cat); full_sid=$(printf "%s" "$input" | sed -n '"'"'s/.*"session_id"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'"'"' | head -1); sid=$(printf "%s" "$full_sid" | cut -c1-8); ESC=$(printf "\033"); sfx=""; [ -n "$sid" ] && sfx="${ESC}[2mSessionID:${ESC}[0m $sid"; last_file="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/claude-full-statusline/last-stop-$full_sid"; if [ -n "$full_sid" ] && [ -f "$last_file" ]; then ts=$(cat "$last_file" 2>/dev/null); if [ -n "$ts" ]; then abs=$(date -d "@$ts" "+%Y-%m-%d %H:%M:%S" 2>/dev/null || date -r "$ts" "+%Y-%m-%d %H:%M:%S" 2>/dev/null); [ -n "$abs" ] && sfx="$sfx ${ESC}[2m| Last:${ESC}[0m $abs"; fi; fi; out=$(printf "%s" "$input" | "$bun_bin" --env-file /dev/null "${plugin_dir}src/index.ts"); if [ -n "$sfx" ]; then printf "%s\n%s\n" "$out" "$sfx"; else printf "%s\n" "$out"; fi'
 EOF
 
 # Stop hook: writes the current epoch to a per-session file.
